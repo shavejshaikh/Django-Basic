@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>QRCODE</title>
+</head>
+<body>
+	<h1>QRCODE</h1>
+	<img src="data:image/png;base64, {{ qrcode }}" class="w-100 h-100"alt="Qrcode"/>
+</body>
+
+<script>
+	(async ()=>{
+		var interval = setInterval(async function(){
+			// alert("async function");
+			const response = await fetch("state");
+			// console.log(response)
+			const data = await response.json()
+			// console.log(data)
+			console.log(data['state'])
+			console.log(data['version'])
+		},3000)
+	})()
+</script>
+</html>

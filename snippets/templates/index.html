@@ -1,0 +1,118 @@
+<html>
+
+    <head>
+
+        <title>Test</title>
+
+        <meta name="referrer" content="origin-when-cross-origin">
+		 <!-- <script src="https://cdn.rawgit.com/onfido/onfido-sdk-ui/master/dist/onfido.min.js"></script> -->
+
+        <script src="https://cdn.jsdelivr.net/npm/onfido-sdk-ui@6.3.1/dist/onfido.min.js"></script>
+
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/onfido-sdk-ui@6.3.1/dist/style.css">
+
+        <style>
+
+            html,
+
+            body {
+
+            height: 100%;
+
+            margin: 0;
+
+            }
+
+        
+
+            body,
+
+            button {
+
+            -webkit-font-smoothing: antialiased;
+
+            }
+
+        
+
+            @media (min-width: 30em) {
+
+            #onfido-mount {
+                position: relative;
+                top: 10%;
+            }
+
+            }
+      
+
+        </style>
+
+    </head>
+
+    <body>
+
+        <div id="onfido-mount"></div>
+
+    </body>
+
+
+
+<script>
+
+    var url = 'http://127.0.0.1:8000/jwt_token'
+
+    var request = new XMLHttpRequest()
+
+    request.open('GET', url, true)
+
+    request.onload = function() {
+
+    if (request.status >= 200 && request.status < 400) {
+
+        var data = JSON.parse(request.responseText)
+
+        console.log(data)
+
+        var app_id = data.applicant_id
+
+        console.log(app_id);
+
+        Onfido.init({
+
+        useModal: false,
+
+        token: data.token,
+
+        containerId: 'onfido-mount',
+
+        onComplete: function(data) {
+            // callback for when everything is complete
+            console.log('everything is complete')
+            console.log(data);
+            console.log(app_id);
+            // console.log(data.applicant_id);
+            window.location.href = "http://127.0.0.1:8000/verifycheck/"+app_id;
+        },
+
+        steps: [{
+		    		"type": 'welcome',
+		    		"options": {
+		      				"title":'Identification Verification Service',
+		      				 "descriptions":["Request a verifiable credential for your identification document."],
+		      				"nextButton":"Start Application",
+		    		},
+		  		}, 
+
+		  		'document', 
+		  		'face', 
+		  		'complete'
+		  		],
+        		})
+
+    }
+
+    }
+
+    request.send()
+
+</script>

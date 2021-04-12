@@ -1,0 +1,241 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.1/css/all.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    />
+    <!-- <link rel="stylesheet" href="../../assets/css/styles.css" /> -->
+    <title>Proof Of ID</title>
+{% comment %}
+
+    <script>
+      __didcomm_url = "{{didcomm_url}}";
+    </script>
+{% endcomment %}
+
+    <script>
+      (async () => {
+        var application_id = '{{application_id}}'
+        var interval = setInterval(async function(){
+          try {
+            console.log("getting state...")
+
+            const response = await fetch('/clearcheck/' + '{{application_id}}');
+            state = await response.json();
+            // console.log(state['response']['checks'][0]['id']);
+            // console.log(state['status']);
+
+            document.getElementById('Checkreport').innerText = state['status'];
+            	    
+           	// var check_id  = state['response']['checks'][0]['id'];
+           	// console.log(check_id);
+
+            if(state["status"] == 'clear') 
+            {
+              
+	              var check_id  = state['response']['checks'][0]['id'];
+	              const report_resp = await fetch("/verifyreport/" + check_id);
+	              reports = await report_resp.json();
+	              console.log(reports['response']);
+	              // console.log(reports['result']);
+	              document.getElementById('Report').innerText = reports['result'];
+
+	              if(reports['result'] == 'clear')
+	              {
+					document.getElementById('doc_type').innerText = reports['doc_type'];
+					document.getElementById('date_of_birth').innerText = reports['date_of_birth'];
+					document.getElementById('date_of_exp').innerText = reports['date_of_exp'];
+					document.getElementById('doc_no').innerText = reports['doc_no'];
+					document.getElementById('issuing_country').innerText = reports['issuing_country'];              	
+	              }
+            
+             }
+            // } else if (state["state"] == 'credential-issued') {
+            //   el = document.querySelector('#connection-formed');
+            //   el.classList.add("done");
+            //   el = document.querySelector('#offer-sending');
+            //   el.classList.add("done");
+            //   el = document.querySelector('#credential-issued');
+            //   el.classList.add("done");
+            //   clearInterval(interval)
+            // }
+            
+          } catch (e) {
+            console.error(e)
+          }
+        }, 3000)
+
+      })();
+    </script>
+
+  </head>
+  <body>
+    <div class="main__layout">
+      <div class="content">
+        <!-- Header --->
+        <nav class="identity__key navbar navbar-expand-lg navbar-light">
+          <div class="container">
+            <a class="navbar-brand" href="https://identity.ky/">
+              <!-- <img
+                src="../../assets/images/idkey/idekey_logo_full.png"
+                class="d-none d-sm-block"
+                alt="Logo"
+              />
+              <img
+                src="../../assets/images/idkey/idekey_logo.png"
+                class="d-sm-none"
+                alt="Logo"
+              /> -->
+            </a>
+            <button
+              class="navbar-toggler"
+              type="button"
+              data-toggle="collapse"
+              data-target="#navbarSupportedContent"
+              aria-controls="navbarSupportedContent"
+              aria-expanded="false"
+              aria-label="Toggle navigation"
+            >
+              <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+              <ul class="navbar-nav ml-auto">
+                <li class="nav-item active">
+                  <a class="nav-link" href="https://identity.ky/">Home </a>
+                </li>
+
+                <li class="nav-item">
+                  <a class="nav-link" href="javascript:void(0);"
+                    >How it works</a
+                  >
+                </li>
+
+                <li class="nav-item">
+                  <a class="nav-link" href="javascript:void(0);"
+                    >Digital Wallet
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="javascript:void(0);"
+                    >For Startups & Enterprise
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link pr-0" href="javascript:void(0);"
+                    >Contact Us
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </nav>
+        <!-- End Header -->
+
+        <div class="emailConfirmation">
+          <div class="qrcode__texture">
+            <div class="connectionStatus">
+              <div class="container">
+                <div class="row">
+                  <div class="col-md-5 offset-md-1">
+                    <div class="pt-4">
+                      <h1 class="connectionStatus__header">
+                        Check Report
+                      </h1>
+                    </div>
+                    Generate Check & Report
+                  </div>
+                  <div class="col-md-5">
+                    <div id="connection-formed" class="connectionStatusBox">
+                      <h3 class="connectionStatusName">CHECK STATUS</h3>
+                      <p class="connectionStatus__sub" id="Checkreport">
+                        
+                      </p>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16.827" height="12.414" viewBox="0 0 16.827 12.414" class="tick">
+                        <path id="Path_2" data-name="Path 2" d="M0,5.753,3.9,10,14,0" transform="translate(1.413 1.414)" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="2"></path>
+                      </svg>
+                    </div>
+                    <div id="offer-sending" class="connectionStatusBox">
+                      <h3 class="connectionStatusName">
+                        REPORT STATUS
+                      </h3>
+                      <p class="connectionStatus__sub" id="Report">
+                        
+                      </p>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16.827" height="12.414" viewBox="0 0 16.827 12.414" class="tick">
+                        <path id="Path_2" data-name="Path 2" d="M0,5.753,3.9,10,14,0" transform="translate(1.413 1.414)" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="2"></path>
+                      </svg>
+                    </div>
+
+                    <div id="credential-issued" class="connectionStatusBox">
+                      <h3 class="connectionStatusName">DOCUMENT INFORMATION</h3>
+                       	<h4>Document Type</h4>  <p id="doc_type"></p>
+                      	<h4>Date Of Birth</h4>  <p id="date_of_birth"></p>
+                      	<h4>Date Of Expiry</h4> <p id="date_of_exp"> </p>
+                      	<h4>Document No</h4>    <p id="doc_no"> </p>
+                      	<h4>Issuing Country</h4><p id="issuing_country"></p>
+
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <div class="email__verification__footer mail__verification__footer--mini">
+        <div class="email__verification__topFooter"></div>
+        <div class="footerbottom">
+          <div class="container">
+            <div class="row">
+              <div class="col-sm-12 col-md-8 col-lg-6">
+                <div class="copyRight d-flex justify-content-between">
+                  <p>© 2020 Identity Key</p>
+                  <ul class="d-flex justify-content-between">
+                    <li>
+                      <a href="https://identity.ky/privacy-policy"
+                        >Privacy Policy</a
+                      >
+                    </li>
+                    <!--
+                  <li><a href="https://identity.ky/privacy-policy">Terms of Service</a></li>
+					-->
+                  </ul>
+                </div>
+              </div>
+              <div class="col-sm-12 col-md-4 col-lg-6">
+                <!--
+              <ul class="socialIcon d-flex justify-content-end">
+                <li>
+                  <a href="#"><i class="fab fa-invision"></i></a>
+                </li>
+                <li>
+                  <a href="#"><i class="fab fa-facebook-square"></i></a>
+                </li>
+                <li>
+                  <a href="#"><i class="fab fa-twitter"></i></a>
+                </li>
+              </ul>
+				-->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- End Footer -->
+    </div>
+
+    <!-- <script src="../../assets/js/jquery.min.js"></script> -->
+    <!-- <script src="../../assets/js/bootstrap.min.js"></script> -->
+  </body>
+</html>
